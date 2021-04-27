@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_16_205702) do
+ActiveRecord::Schema.define(version: 2021_04_17_202746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "albums", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "spotify_id", null: false
+    t.integer "popularity"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "albums_artists", id: false, force: :cascade do |t|
+    t.bigint "artist_id", null: false
+    t.bigint "album_id", null: false
+  end
 
   create_table "artists", force: :cascade do |t|
     t.string "name", null: false
@@ -53,8 +66,10 @@ ActiveRecord::Schema.define(version: 2021_04_16_205702) do
   create_table "songs", force: :cascade do |t|
     t.string "title", null: false
     t.string "spotify_id", null: false
+    t.bigint "album_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["album_id"], name: "index_songs_on_album_id"
   end
 
   create_table "submissions", force: :cascade do |t|
@@ -69,7 +84,7 @@ ActiveRecord::Schema.define(version: 2021_04_16_205702) do
   end
 
   create_table "votes", id: false, force: :cascade do |t|
-    t.bigint "particpant_id", null: false
+    t.bigint "participant_id", null: false
     t.bigint "submission_id", null: false
   end
 
